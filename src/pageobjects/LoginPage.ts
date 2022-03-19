@@ -20,8 +20,8 @@ export class LoginPage {
 
   async loginUser() {
     await this.page.goto('account/login');
-    expect(this.emailInput).toBeVisible();
-    expect(this.passwordInput).toBeVisible();
+    // expect(this.emailInput).toBeVisible();
+    // expect(this.passwordInput).toBeVisible();
     await this.emailInput.fill(creds.emailAddress);
     await this.passwordInput.fill(creds.password);
     await Promise.all([this.page.waitForNavigation(), this.submitButton.click()]);

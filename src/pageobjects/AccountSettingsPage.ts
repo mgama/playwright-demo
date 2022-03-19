@@ -14,12 +14,12 @@ export class AccountSettingsPage {
   }
 
   async goToProfileInfo() {
-    expect(this.profileInfoMenuOption).toBeVisible();
+    // expect(this.profileInfoMenuOption).toBeVisible();
     await this.profileInfoMenuOption.click();
   }
 
   async goToAccountSettings() {
-    expect(this.accountSettingsMenuOption).toBeVisible();
+    // expect(this.accountSettingsMenuOption).toBeVisible();
     await this.accountSettingsMenuOption.click();
   }
 }

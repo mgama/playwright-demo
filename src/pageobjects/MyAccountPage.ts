@@ -16,13 +16,13 @@ export class MyAccountPage {
   }
 
   async goToProfileInfo() {
-    expect(this.profileInfoMenuOption).toBeVisible();
+    // expect(this.profileInfoMenuOption).toBeVisible();
     await this.profileInfoMenuOption.click();
     return new ProfileInfoPage(this.page);
   }
 
   async goToAccountSettings() {
-    expect(this.accountSettingsMenuOption).toBeVisible();
+    // expect(this.accountSettingsMenuOption).toBeVisible();
     await this.accountSettingsMenuOption.click();
     return new AccountSettingsPage(this.page);
   }
