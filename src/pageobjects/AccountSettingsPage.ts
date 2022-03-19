@@ -1,25 +1,33 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
+import { EditShippingAddressPage } from './EditShippingAddressPage';
+import { ManagePaymentMethodPage } from './ManagePaymentMethodPage';
 
 export class AccountSettingsPage {
   page: Page;
-  accountPopOverName: Locator;
-  profileInfoMenuOption: Locator;
-  accountSettingsMenuOption: Locator;
+  editAddressBookButton: Locator;
+  displayedAddress: Locator;
+  addPaymentMethodButton: Locator;
+  reactivateSubscriptionButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.accountPopOverName = page.locator('my-account-popover-name');
-    this.profileInfoMenuOption = page.locator('text=Profile Info');
-    this.accountSettingsMenuOption = page.locator('text=Account Settings');
+    this.displayedAddress = page.locator('div.global-address-display address-text');
+    this.editAddressBookButton = page.locator('button#edit-address-0');
+    this.addPaymentMethodButton = page.locator('button#add-payment-method');
+    this.reactivateSubscriptionButton = page.locator('button#reactivate-subscription-0');
   }
 
-  async goToProfileInfo() {
-    // expect(this.profileInfoMenuOption).toBeVisible();
-    await this.profileInfoMenuOption.click();
+  async goToEditAddressBook() {
+    await this.editAddressBookButton.click();
+    return new EditShippingAddressPage(this.page);
   }
 
-  async goToAccountSettings() {
-    // expect(this.accountSettingsMenuOption).toBeVisible();
-    await this.accountSettingsMenuOption.click();
+  async goToManagePaymentMethod() {
+    await this.addPaymentMethodButton.click();
+    return new ManagePaymentMethodPage(this.page);
+  }
+
+  async goToReactivateSubscription() {
+    await this.reactivateSubscriptionButton.click();
   }
 }
