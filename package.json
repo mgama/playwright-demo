@@ -1,4 +1,12 @@
 {
+  "name": "playwright-demo",
+  "version": "0.0.1",
+  "description": "Playwright Demo Test Framework",
+  "author": "Manuel Gama (mgamamsc@gmail.com)",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "test": "npx playwright test --headed"
+  },
   "devDependencies": {
     "@playwright/test": "^1.19.2"
   }
