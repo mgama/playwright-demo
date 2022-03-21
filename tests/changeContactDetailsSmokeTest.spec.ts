@@ -1,81 +1,96 @@
 import { test, expect } from '@playwright/test';
 import {LoginPage} from '../src/pageobjects/LoginPage';
 import {MyAccountPage} from '../src/pageobjects/MyAccountPage';
+import GenerateRandomData from '../src/data/GenerateRandomData';
 
-// This works
-test.beforeEach(async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.loginUser();
+test.describe('Change Contact Details Smoketests', () => {
+  const generateRandomData = new GenerateRandomData();
+
+  test.beforeEach(async ({ page }) => {
+      const loginPage = new LoginPage(page);
+      await loginPage.loginUser();
+    });
+
+  test('Change User First Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+      const myAccountPage = new MyAccountPage(page);
+      const profileInfoPage = await myAccountPage.goToProfileInfo();
+      // console.log(await profileInfoPage.contactDetailsName.innerText());
+      const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+      const randomStringForTestData = await generateRandomData.generateRandomString();
+      await editContactDetailsPage.changeFirstName(randomStringForTestData);
+      // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
+      // await page.pause(); //For debug UI only
+      await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
+      await editContactDetailsPage.cancelChanges();
   });
 
-test('Change User First Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+  test('Change User First Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
+      const myAccountPage = new MyAccountPage(page);
+      const profileInfoPage = await myAccountPage.goToProfileInfo();
+      // console.log(await profileInfoPage.contactDetailsName.innerText());
+      const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+      const randomStringForTestData = await generateRandomData.generateRandomString();
+      await editContactDetailsPage.changeFirstName(randomStringForTestData);
+      // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
+      // await page.pause(); //For debug UI only
+      await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
+      // await editContactDetailsPage.saveChanges(); //Enable to save the changes
+  });
+
+  test('Change User Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
     // console.log(await profileInfoPage.contactDetailsName.innerText());
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-    await editContactDetailsPage.changeFirstName('test');
+    const randomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeLastName(randomStringForTestData);
     // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
     // await page.pause(); //For debug UI only
-    await expect(editContactDetailsPage.firstNameInput).toHaveValue('test');
+    await expect(editContactDetailsPage.lastNameInput).toHaveValue(randomStringForTestData);
     await editContactDetailsPage.cancelChanges();
-});
+  });
 
-test('Change User First Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
+  test('Change User Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
+    // console.log(await profileInfoPage.contactDetailsName.innerText());
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-    await editContactDetailsPage.changeFirstName('test');
-    await expect(editContactDetailsPage.firstNameInput).toHaveValue('test');
+    const randomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeLastName(randomStringForTestData);
+    // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
     // await page.pause(); //For debug UI only
+    await expect(editContactDetailsPage.lastNameInput).toHaveValue(randomStringForTestData);
     // await editContactDetailsPage.saveChanges(); //Enable to save the changes
-});
+  });
 
-test('Change User Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
-  const myAccountPage = new MyAccountPage(page);
-  const profileInfoPage = await myAccountPage.goToProfileInfo();
-  // console.log(await profileInfoPage.contactDetailsName.innerText());
-  const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-  await editContactDetailsPage.changeLastName('test');
-  // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-  // await page.pause(); //For debug UI only
-  await expect(editContactDetailsPage.lastNameInput).toHaveValue('test');
-  await editContactDetailsPage.cancelChanges();
-});
+  test('Change User First and Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
+    const myAccountPage = new MyAccountPage(page);
+    const profileInfoPage = await myAccountPage.goToProfileInfo();
+    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+    const randomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeFirstName(randomStringForTestData);
+    await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
+    const secondRandomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeLastName(secondRandomStringForTestData);
+    await expect(editContactDetailsPage.lastNameInput).toHaveValue(secondRandomStringForTestData);
+    // await editContactDetailsPage.saveChanges(); //Enable to save the changes
+  });
 
-test('Change User Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
-  const myAccountPage = new MyAccountPage(page);
-  const profileInfoPage = await myAccountPage.goToProfileInfo();
-  // console.log(await profileInfoPage.contactDetailsName.innerText());
-  const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-  await editContactDetailsPage.changeLastName('test');
-  // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-  // await page.pause(); //For debug UI only
-  await expect(editContactDetailsPage.lastNameInput).toHaveValue('test');
-  // await editContactDetailsPage.saveChanges(); //Enable to save the changes
-});
+  test('Change User First and Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+    const myAccountPage = new MyAccountPage(page);
+    const profileInfoPage = await myAccountPage.goToProfileInfo();
+    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+    const randomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeFirstName(randomStringForTestData);
+    await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
+    const secondRandomStringForTestData = await generateRandomData.generateRandomString();
+    await editContactDetailsPage.changeLastName(secondRandomStringForTestData);
+    await expect(editContactDetailsPage.lastNameInput).toHaveValue(secondRandomStringForTestData);
+    await editContactDetailsPage.cancelChanges();
+  });
 
-test('Change User First and Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
-  const myAccountPage = new MyAccountPage(page);
-  const profileInfoPage = await myAccountPage.goToProfileInfo();
-  // console.log(await profileInfoPage.contactDetailsName.innerText());
-  const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-  await editContactDetailsPage.changeFirstName('testFirstName');
-  await expect(editContactDetailsPage.firstNameInput).toHaveValue('testFirstName');
-  await editContactDetailsPage.changeLastName('testLastName');
-  await expect(editContactDetailsPage.lastNameInput).toHaveValue('testLastName');
-  // await editContactDetailsPage.saveChanges(); //Enable to save the changes
-});
-
-test('Change User First and Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
-  const myAccountPage = new MyAccountPage(page);
-  const profileInfoPage = await myAccountPage.goToProfileInfo();
-  // console.log(await profileInfoPage.contactDetailsName.innerText());
-  const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
-  await editContactDetailsPage.changeFirstName('testFirstName');
-  await expect(editContactDetailsPage.firstNameInput).toHaveValue('testFirstName');
-  await editContactDetailsPage.changeLastName('testLastName');
-  await expect(editContactDetailsPage.lastNameInput).toHaveValue('testLastName');
-  await editContactDetailsPage.cancelChanges();
 });
 
 // This does not work
