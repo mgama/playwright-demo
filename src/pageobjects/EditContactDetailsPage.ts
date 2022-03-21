@@ -12,10 +12,12 @@ export class EditContactDetailsPage {
   emailInput: Locator;
   saveButton: Locator;
   cancelButton: Locator;
+  profileSuccesfullyUpdatedNotification: Locator;
+  errorOnProfileUpdateNotification: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.backToProfileInfoButton = page.locator('text=Back to Profile Info');
+    this.backToProfileInfoButton = page.locator('text=< Back to Profile Info');
     this.editContactDetailsHeader = page.locator('text=Edit Contact Details');
     this.firstNameLabel = page.locator('label[text=First Name]');
     this.firstNameInput = page.locator('input[name=first_name]');
@@ -25,6 +27,8 @@ export class EditContactDetailsPage {
     this.emailInput = page.locator('input[name=email]'); //Extra locator not required for current test cases
     this.saveButton = page.locator('button#user-details-submit');
     this.cancelButton = page.locator('button#user-details-cancel');
+    this.profileSuccesfullyUpdatedNotification = page.locator('text=Profile info successfully updated');
+    this.errorOnProfileUpdateNotification = page.locator('text=Error updating profile info');
   }
 
   async changeFirstName(firstName: string) {
@@ -45,5 +49,17 @@ export class EditContactDetailsPage {
 
   async cancelChanges() {
     await Promise.all([this.page.waitForNavigation(), await this.cancelButton.click()]);
+  }
+
+  async waitForSuccessfulProfileUpdateNotification() {
+    await this.profileSuccesfullyUpdatedNotification.waitFor({state: 'visible'});
+  }
+
+  async waitForErrorOnProfileUpdateNotification() {
+    await this.errorOnProfileUpdateNotification.waitFor({state: 'visible'});
+  }
+
+  async goBackToProfileInfo() {
+    await Promise.all([this.page.waitForNavigation(), await this.backToProfileInfoButton.click()]);
   }
 }

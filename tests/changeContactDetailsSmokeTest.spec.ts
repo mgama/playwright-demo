@@ -14,59 +14,64 @@ test.describe('Change Contact Details Smoketests', () => {
   test('Change User First Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
       const myAccountPage = new MyAccountPage(page);
       const profileInfoPage = await myAccountPage.goToProfileInfo();
-      // console.log(await profileInfoPage.contactDetailsName.innerText());
+      const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
       const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
       const randomStringForTestData = await generateRandomData.generateRandomString();
       await editContactDetailsPage.changeFirstName(randomStringForTestData);
-      // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-      // await page.pause(); //For debug UI only
       await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
       await editContactDetailsPage.cancelChanges();
+      const contactDetailsNameAfterCancellingChanges = await profileInfoPage.contactDetailsName.innerText();
+      expect(contactDetailsNameAfterCancellingChanges).toMatch(currentContactDetailsName);
   });
 
+  
   test('Change User First Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
       const myAccountPage = new MyAccountPage(page);
       const profileInfoPage = await myAccountPage.goToProfileInfo();
-      // console.log(await profileInfoPage.contactDetailsName.innerText());
+      const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
       const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
       const randomStringForTestData = await generateRandomData.generateRandomString();
       await editContactDetailsPage.changeFirstName(randomStringForTestData);
-      // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-      // await page.pause(); //For debug UI only
       await expect(editContactDetailsPage.firstNameInput).toHaveValue(randomStringForTestData);
-      // await editContactDetailsPage.saveChanges(); //Enable to save the changes
+      await editContactDetailsPage.saveChanges();
+      await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
+      await editContactDetailsPage.goBackToProfileInfo();
+      const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
+      expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
   test('Change User Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
-    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
     const randomStringForTestData = await generateRandomData.generateRandomString();
     await editContactDetailsPage.changeLastName(randomStringForTestData);
-    // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-    // await page.pause(); //For debug UI only
     await expect(editContactDetailsPage.lastNameInput).toHaveValue(randomStringForTestData);
     await editContactDetailsPage.cancelChanges();
+    const contactDetailsNameAfterCancellingChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterCancellingChanges).toMatch(currentContactDetailsName);
   });
 
   test('Change User Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
-    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
     const randomStringForTestData = await generateRandomData.generateRandomString();
     await editContactDetailsPage.changeLastName(randomStringForTestData);
-    // await expect(editContactDetailsPage.firstNameInput).toHaveValue('test'); //Locator not working yet
-    // await page.pause(); //For debug UI only
     await expect(editContactDetailsPage.lastNameInput).toHaveValue(randomStringForTestData);
-    // await editContactDetailsPage.saveChanges(); //Enable to save the changes
+    await editContactDetailsPage.saveChanges();
+    await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
+    await editContactDetailsPage.goBackToProfileInfo();
+    const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
   test('Change User First and Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
-    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
     const randomStringForTestData = await generateRandomData.generateRandomString();
     await editContactDetailsPage.changeFirstName(randomStringForTestData);
@@ -74,13 +79,17 @@ test.describe('Change Contact Details Smoketests', () => {
     const secondRandomStringForTestData = await generateRandomData.generateRandomString();
     await editContactDetailsPage.changeLastName(secondRandomStringForTestData);
     await expect(editContactDetailsPage.lastNameInput).toHaveValue(secondRandomStringForTestData);
-    // await editContactDetailsPage.saveChanges(); //Enable to save the changes
+    await editContactDetailsPage.saveChanges();
+    await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
+    await editContactDetailsPage.goBackToProfileInfo();
+    const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
   test('Change User First and Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
-    // console.log(await profileInfoPage.contactDetailsName.innerText());
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
     const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
     const randomStringForTestData = await generateRandomData.generateRandomString();
     await editContactDetailsPage.changeFirstName(randomStringForTestData);
@@ -89,13 +98,7 @@ test.describe('Change Contact Details Smoketests', () => {
     await editContactDetailsPage.changeLastName(secondRandomStringForTestData);
     await expect(editContactDetailsPage.lastNameInput).toHaveValue(secondRandomStringForTestData);
     await editContactDetailsPage.cancelChanges();
+    const contactDetailsNameAfterCancellingChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterCancellingChanges).toMatch(currentContactDetailsName);
   });
-
 });
-
-// This does not work
-// test.use({storageState: 'storageState.json'});
-// test('Sign In, Change User Profile Info smoketest', async ({ page }) => {
-//         await page.goto('/');
-//         // expect 
-//     });
