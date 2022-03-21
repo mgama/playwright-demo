@@ -11,7 +11,7 @@ export class AccountSettingsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.displayedAddress = page.locator('div.global-address-display address-text');
+    this.displayedAddress = page.locator('div.global-address-display');
     this.editAddressBookButton = page.locator('button#edit-address-0');
     this.addPaymentMethodButton = page.locator('button#add-payment-method');
     this.reactivateSubscriptionButton = page.locator('button#reactivate-subscription-0');

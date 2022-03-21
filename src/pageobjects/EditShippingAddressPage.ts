@@ -26,6 +26,8 @@ export class EditShippingAddressPage {
   phoneNumberInput: Locator;
   saveButton: Locator;
   cancelButton: Locator;
+  successfulAddressUpdateNotification: Locator;
+  errorOnAddressUpdateNotification: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -53,6 +55,8 @@ export class EditShippingAddressPage {
     this.phoneNumberInput = page.locator('input[name=phone_number]');
     this.saveButton = page.locator('button#lovevery-address-form-submit');
     this.cancelButton = page.locator('button#lovevery-address-form-cancel');
+    this.successfulAddressUpdateNotification = page.locator('text=Address successfully updated');
+    this.errorOnAddressUpdateNotification = page.locator('text=Error updating address');
   }
 
   async changeFirstName(firstName: string) {
@@ -108,6 +112,18 @@ export class EditShippingAddressPage {
   }
 
   async cancelChanges() {
-    await this.cancelButton.click();
+    await Promise.all([this.page.waitForNavigation(), await this.cancelButton.click()]);
+  }
+
+  async waitForSuccessfulAddressUpdateNotification() {
+    await this.successfulAddressUpdateNotification.waitFor({state: 'visible'});
+  }
+
+  async waitForErrorOnAddressUpdateNotification() {
+    await this.errorOnAddressUpdateNotification.waitFor({state: 'visible'});
+  }
+
+  async goBackToAccountSettings() {
+    await Promise.all([this.page.waitForNavigation(), await this.backToAccountSettingsButton.click()]);
   }
 }

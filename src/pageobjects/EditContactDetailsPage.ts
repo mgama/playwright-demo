@@ -40,12 +40,10 @@ export class EditContactDetailsPage {
   }
 
   async saveChanges() {
-    // expect(this.saveButton).toBeEnabled();
     await this.saveButton.click();
   }
 
   async cancelChanges() {
-    // expect(this.cancelButton).toBeEnabled();
-    await this.cancelButton.click();
+    await Promise.all([this.page.waitForNavigation(), await this.cancelButton.click()]);
   }
 }
