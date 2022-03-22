@@ -11,7 +11,7 @@ test.describe('Change Contact Details Smoketests', () => {
       await loginPage.loginUser();
     });
 
-  test('Change User First Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+  test('Negative Test: Change User First Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
       const myAccountPage = new MyAccountPage(page);
       const profileInfoPage = await myAccountPage.goToProfileInfo();
       const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
@@ -40,7 +40,43 @@ test.describe('Change Contact Details Smoketests', () => {
       expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
-  test('Change User Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+  test(`Negative Test: Change User First Name to empty value from Profile Info Page 
+  and Verify error on Required field smoketest`, async ({ page }) => {
+    const myAccountPage = new MyAccountPage(page);
+    const profileInfoPage = await myAccountPage.goToProfileInfo();
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
+    const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+    await editContactDetailsPage.changeFirstName('');
+    await expect(editContactDetailsPage.firstNameInput).toHaveValue('');
+    await editContactDetailsPage.saveChanges();
+    await editContactDetailsPage.waitForRequiredFieldError();
+    await expect(editContactDetailsPage.requiredFieldError).toBeVisible();
+    await expect(editContactDetailsPage.firstNameInput).toHaveValue('');
+    await editContactDetailsPage.goBackToProfileInfo();
+    const contactDetailsNameAfterAttemptedFirstNameChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterAttemptedFirstNameChanges).toMatch(currentContactDetailsName);
+  });
+
+  // Currently failing since there is a bug. Last Name is not a required field
+  // on the Edit Contact Details Page
+  test(`Negative Test: Change User Last Name to empty value from Profile Info Page 
+  and Verify error on Required field smoketest`, async ({ page }) => {
+    const myAccountPage = new MyAccountPage(page);
+    const profileInfoPage = await myAccountPage.goToProfileInfo();
+    const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
+    const editContactDetailsPage = await profileInfoPage.goToEditContactDetails();
+    await editContactDetailsPage.changeLastName('');
+    await expect(editContactDetailsPage.lastNameInput).toHaveValue('');
+    await editContactDetailsPage.saveChanges();
+    await editContactDetailsPage.waitForRequiredFieldError();
+    await expect(editContactDetailsPage.requiredFieldError).toBeVisible();
+    await expect(editContactDetailsPage.firstNameInput).toHaveValue('');
+    await editContactDetailsPage.goBackToProfileInfo();
+    const contactDetailsNameAfterAttemptedLastNameChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterAttemptedLastNameChanges).toMatch(currentContactDetailsName);
+  });
+
+  test('Negative Test: Change User Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
     const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();
@@ -86,7 +122,7 @@ test.describe('Change Contact Details Smoketests', () => {
     expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
-  test('Change User First and Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
+  test('Negative Test: Change User First and Last Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
     const myAccountPage = new MyAccountPage(page);
     const profileInfoPage = await myAccountPage.goToProfileInfo();
     const currentContactDetailsName = await profileInfoPage.contactDetailsName.innerText();

@@ -14,6 +14,7 @@ export class EditContactDetailsPage {
   cancelButton: Locator;
   profileSuccesfullyUpdatedNotification: Locator;
   errorOnProfileUpdateNotification: Locator;
+  requiredFieldError: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,6 +30,7 @@ export class EditContactDetailsPage {
     this.cancelButton = page.locator('button#user-details-cancel');
     this.profileSuccesfullyUpdatedNotification = page.locator('text=Profile info successfully updated');
     this.errorOnProfileUpdateNotification = page.locator('text=Error updating profile info');
+    this.requiredFieldError = page.locator('text=Required');
   }
 
   async changeFirstName(firstName: string) {
@@ -61,5 +63,9 @@ export class EditContactDetailsPage {
 
   async goBackToProfileInfo() {
     await Promise.all([this.page.waitForNavigation(), await this.backToProfileInfoButton.click()]);
+  }
+
+  async waitForRequiredFieldError() {
+    await this.requiredFieldError.waitFor({state: 'visible'});
   }
 }

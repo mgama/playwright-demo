@@ -38,7 +38,7 @@ test.describe('Change Child Details Smoketests', () => {
         expect(childDetailsNameAfterSavingChanges).not.toMatch(currentChildDetailsName);
     });
 
-    test('Change Child Name to Empty from Profile Info Page and Verify Error smoketest', async ({ page }) => {
+    test('Negative Test: Change Child Name to Empty from Profile Info Page and Verify Error smoketest', async ({ page }) => {
         const myAccountPage = new MyAccountPage(page);
         const profileInfoPage = await myAccountPage.goToProfileInfo();
         const currentChildDetailsName = await profileInfoPage.childDetailsName.innerText();

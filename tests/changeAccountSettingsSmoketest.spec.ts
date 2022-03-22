@@ -11,7 +11,7 @@ test.describe('Change Account Settings Smoketests', () => {
         await loginPage.loginUser();
     });
 
-    test('Change All Address Values (valid US Address) on Account Settings and Cancel Changes smoketest', async ({ page }) => {
+    test('Negative Test: Change All Address Values (valid US Address) on Account Settings and Cancel Changes', async ({ page }) => {
         const myAccountPage = new MyAccountPage(page);
         const accountSettingsPage = await myAccountPage.goToAccountSettings();
         const originalAddress = await accountSettingsPage.displayedAddress.innerText();
@@ -43,7 +43,7 @@ test.describe('Change Account Settings Smoketests', () => {
         expect(displayedAddressAfterCancellingChanges).toMatch(originalAddress);
     });
 
-    test('Change All Address Values (valid US Address) on Account Settings and Save Changes smoketest', async ({ page }) => {
+    test('Change All Address Values (valid US Address) on Account Settings and Save Changes', async ({ page }) => {
         const myAccountPage = new MyAccountPage(page);
         const accountSettingsPage = await myAccountPage.goToAccountSettings();
         const originalAddress = await accountSettingsPage.displayedAddress.innerText();
@@ -77,13 +77,11 @@ test.describe('Change Account Settings Smoketests', () => {
         expect(displayedAddressAfterSavingChanges).not.toMatch(originalAddress);
     });
 
-    test('Change Zip Code to empty value on Account Settings and Verify Error on Required field smoketest', async ({ page }) => {
+    test('Negative Test: Change Zip Code to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
         const myAccountPage = new MyAccountPage(page);
         const accountSettingsPage = await myAccountPage.goToAccountSettings();
         const originalAddress = await accountSettingsPage.displayedAddress.innerText();
         const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
-        const randomStringForTestData = await generateRandomData.generateRandomString();
-        await expect(editShippingAddressPage.stateDropdown).toHaveValue('Massachusetts');
         await editShippingAddressPage.changeZipCode('');
         await expect(editShippingAddressPage.zipCodeInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();
@@ -94,6 +92,74 @@ test.describe('Change Account Settings Smoketests', () => {
         // Verify the displayed address on the Account Settings Page has not been updated to the zip code changes tried on this test
         const displayedAddressAfterAttemptedZipCodeChanges = await accountSettingsPage.displayedAddress.innerText();
         expect(displayedAddressAfterAttemptedZipCodeChanges).toMatch(originalAddress);
+    });
+
+    test('Negative Test: Change First Name to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
+        const myAccountPage = new MyAccountPage(page);
+        const accountSettingsPage = await myAccountPage.goToAccountSettings();
+        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
+        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
+        await editShippingAddressPage.changeFirstName('');
+        await expect(editShippingAddressPage.firstNameInput).toHaveValue('');
+        await editShippingAddressPage.saveChanges();
+        await editShippingAddressPage.waitForRequiredFieldErrorMessage();
+        await expect(editShippingAddressPage.requiredFieldErrorMessage).toBeVisible();
+        await expect(editShippingAddressPage.firstNameInput).toHaveValue('');
+        await editShippingAddressPage.goBackToAccountSettings();
+        // Verify the displayed address on the Account Settings Page has not been updated to the first name changes tried on this test
+        const displayedAddressAfterAttemptedFirstNameChanges = await accountSettingsPage.displayedAddress.innerText();
+        expect(displayedAddressAfterAttemptedFirstNameChanges).toMatch(originalAddress);
+    });
+
+    test('Negative Test: Change Last Name to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
+        const myAccountPage = new MyAccountPage(page);
+        const accountSettingsPage = await myAccountPage.goToAccountSettings();
+        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
+        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
+        await editShippingAddressPage.changeLastName('');
+        await expect(editShippingAddressPage.lastNameInput).toHaveValue('');
+        await editShippingAddressPage.saveChanges();
+        await editShippingAddressPage.waitForRequiredFieldErrorMessage();
+        await expect(editShippingAddressPage.requiredFieldErrorMessage).toBeVisible();
+        await expect(editShippingAddressPage.lastNameInput).toHaveValue('');
+        await editShippingAddressPage.goBackToAccountSettings();
+        // Verify the displayed address on the Account Settings Page has not been updated to the last name changes tried on this test
+        const displayedAddressAfterAttemptedLastNameChanges = await accountSettingsPage.displayedAddress.innerText();
+        expect(displayedAddressAfterAttemptedLastNameChanges).toMatch(originalAddress);
+    });
+
+    test('Negative Test: Change Street Address to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
+        const myAccountPage = new MyAccountPage(page);
+        const accountSettingsPage = await myAccountPage.goToAccountSettings();
+        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
+        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
+        await editShippingAddressPage.changeStreetAddress('');
+        await expect(editShippingAddressPage.streetAddressInput).toHaveValue('');
+        await editShippingAddressPage.saveChanges();
+        await editShippingAddressPage.waitForRequiredFieldErrorMessage();
+        await expect(editShippingAddressPage.requiredFieldErrorMessage).toBeVisible();
+        await expect(editShippingAddressPage.streetAddressInput).toHaveValue('');
+        await editShippingAddressPage.goBackToAccountSettings();
+        // Verify the displayed address on the Account Settings Page has not been updated to the Street Address changes tried on this test
+        const displayedAddressAfterAttemptedStreetAddressChanges = await accountSettingsPage.displayedAddress.innerText();
+        expect(displayedAddressAfterAttemptedStreetAddressChanges).toMatch(originalAddress);
+    });
+
+    test('Negative Test: Change City to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
+        const myAccountPage = new MyAccountPage(page);
+        const accountSettingsPage = await myAccountPage.goToAccountSettings();
+        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
+        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
+        await editShippingAddressPage.changeCity('');
+        await expect(editShippingAddressPage.cityInput).toHaveValue('');
+        await editShippingAddressPage.saveChanges();
+        await editShippingAddressPage.waitForRequiredFieldErrorMessage();
+        await expect(editShippingAddressPage.requiredFieldErrorMessage).toBeVisible();
+        await expect(editShippingAddressPage.cityInput).toHaveValue('');
+        await editShippingAddressPage.goBackToAccountSettings();
+        // Verify the displayed address on the Account Settings Page has not been updated to the City changes tried on this test
+        const displayedAddressAfterAttemptedCityChanges = await accountSettingsPage.displayedAddress.innerText();
+        expect(displayedAddressAfterAttemptedCityChanges).toMatch(originalAddress);
     });
 
 });
