@@ -28,6 +28,7 @@ export class EditShippingAddressPage {
   cancelButton: Locator;
   successfulAddressUpdateNotification: Locator;
   errorOnAddressUpdateNotification: Locator;
+  requiredFieldErrorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -57,6 +58,7 @@ export class EditShippingAddressPage {
     this.cancelButton = page.locator('button#lovevery-address-form-cancel');
     this.successfulAddressUpdateNotification = page.locator('text=Address successfully updated');
     this.errorOnAddressUpdateNotification = page.locator('text=Error updating address');
+    this.requiredFieldErrorMessage = page.locator('text=Required');
   }
 
   async changeFirstName(firstName: string) {
@@ -125,5 +127,9 @@ export class EditShippingAddressPage {
 
   async goBackToAccountSettings() {
     await Promise.all([this.page.waitForNavigation(), await this.backToAccountSettingsButton.click()]);
+  }
+
+  async waitForRequiredFieldErrorMessage() {
+    await this.requiredFieldErrorMessage.waitFor({state: 'visible'});
   }
 }
