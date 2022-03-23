@@ -37,6 +37,7 @@ test.describe('Change Contact Details Smoketests', () => {
       await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
       await editContactDetailsPage.goBackToProfileInfo();
       const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
+      expect(contactDetailsNameAfterSavingChanges).toContain(randomStringForTestData);
       expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
@@ -101,7 +102,7 @@ test.describe('Change Contact Details Smoketests', () => {
     await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
     await editContactDetailsPage.goBackToProfileInfo();
     const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
-    expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
+    expect(contactDetailsNameAfterSavingChanges).toContain(randomStringForTestData);
   });
 
   test('Change User First and Last Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
@@ -119,6 +120,8 @@ test.describe('Change Contact Details Smoketests', () => {
     await editContactDetailsPage.waitForSuccessfulProfileUpdateNotification();
     await editContactDetailsPage.goBackToProfileInfo();
     const contactDetailsNameAfterSavingChanges = await profileInfoPage.contactDetailsName.innerText();
+    expect(contactDetailsNameAfterSavingChanges).toContain(randomStringForTestData);
+    expect(contactDetailsNameAfterSavingChanges).toContain(secondRandomStringForTestData);
     expect(contactDetailsNameAfterSavingChanges).not.toMatch(currentContactDetailsName);
   });
 
