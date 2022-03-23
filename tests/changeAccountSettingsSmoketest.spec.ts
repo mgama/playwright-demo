@@ -1,21 +1,29 @@
 import { test, expect } from '@playwright/test';
-import {LoginPage} from '../src/pageobjects/LoginPage';
 import {MyAccountPage} from '../src/pageobjects/MyAccountPage';
 import GenerateRandomData from '../src/data/GenerateRandomData';
+import { AccountSettingsPage } from '../src/pageobjects/AccountSettingsPage';
+import { EditShippingAddressPage } from '../src/pageobjects/EditShippingAddressPage';
+
+test.use({
+    // Reuse the login state in each test
+    storageState: 'login-state.json'
+  })
 
 test.describe('Change Account Settings Smoketests', () => {
-
     const generateRandomData = new GenerateRandomData()
+    let accountSettingsPage: AccountSettingsPage;
+    let originalAddress = '';
+    let editShippingAddressPage: EditShippingAddressPage;
+    
     test.beforeEach(async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        await loginPage.loginUser();
+        const myAccountPage = new MyAccountPage(page);
+        await myAccountPage.goTo();
+        accountSettingsPage = await myAccountPage.goToAccountSettings();
+        originalAddress = await accountSettingsPage.displayedAddress.innerText();
+        editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
     });
 
     test('Negative Test: Change All Address Values (valid US Address) on Account Settings and Cancel Changes', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         const randomStringForTestData = await generateRandomData.generateRandomString();
         await editShippingAddressPage.changeFirstName(randomStringForTestData);
         await expect(editShippingAddressPage.firstNameInput).toHaveValue(randomStringForTestData);
@@ -44,10 +52,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Change All Address Values (valid US Address) on Account Settings and Save Changes', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         const randomStringForTestData = await generateRandomData.generateRandomString();
         await editShippingAddressPage.changeFirstName(randomStringForTestData);
         await expect(editShippingAddressPage.firstNameInput).toHaveValue(randomStringForTestData);
@@ -78,10 +82,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Negative Test: Change Zip Code to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         await editShippingAddressPage.changeZipCode('');
         await expect(editShippingAddressPage.zipCodeInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();
@@ -95,10 +95,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Negative Test: Change First Name to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         await editShippingAddressPage.changeFirstName('');
         await expect(editShippingAddressPage.firstNameInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();
@@ -112,10 +108,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Negative Test: Change Last Name to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         await editShippingAddressPage.changeLastName('');
         await expect(editShippingAddressPage.lastNameInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();
@@ -129,10 +121,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Negative Test: Change Street Address to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         await editShippingAddressPage.changeStreetAddress('');
         await expect(editShippingAddressPage.streetAddressInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();
@@ -146,10 +134,6 @@ test.describe('Change Account Settings Smoketests', () => {
     });
 
     test('Negative Test: Change City to empty value on Account Settings and Verify Error on Required field', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const accountSettingsPage = await myAccountPage.goToAccountSettings();
-        const originalAddress = await accountSettingsPage.displayedAddress.innerText();
-        const editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
         await editShippingAddressPage.changeCity('');
         await expect(editShippingAddressPage.cityInput).toHaveValue('');
         await editShippingAddressPage.saveChanges();

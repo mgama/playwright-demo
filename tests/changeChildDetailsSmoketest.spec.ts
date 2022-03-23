@@ -1,20 +1,29 @@
 import { test, expect } from '@playwright/test';
-import {LoginPage} from '../src/pageobjects/LoginPage';
 import {MyAccountPage} from '../src/pageobjects/MyAccountPage';
 import GenerateRandomData from '../src/data/GenerateRandomData';
+import { ProfileInfoPage } from '../src/pageobjects/ProfileInfoPage';
+import { EditChildDetailsPage } from '../src/pageobjects/EditChildDetailsPage';
+
+test.use({
+    // Reuse the login state in each test
+    storageState: 'login-state.json'
+  })
 
 test.describe('Change Child Details Smoketests', () => {
     const generateRandomData = new GenerateRandomData();
+    let profileInfoPage: ProfileInfoPage;
+    let currentChildDetailsName = '';
+    let editChildDetailsPage: EditChildDetailsPage;
+    
     test.beforeEach(async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        await loginPage.loginUser();
+        const myAccountPage = new MyAccountPage(page);
+        await myAccountPage.goTo();
+        profileInfoPage = await myAccountPage.goToProfileInfo();
+        currentChildDetailsName = await profileInfoPage.childDetailsName.innerText();
+        editChildDetailsPage = await profileInfoPage.goToEditChildDetails();
     });
 
     test('Change Child Name from Profile Info Page and Cancel Changes smoketest', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const profileInfoPage = await myAccountPage.goToProfileInfo();
-        const currentChildDetailsName = await profileInfoPage.childDetailsName.innerText();
-        const editChildDetailsPage = await profileInfoPage.goToEditChildDetails();
         const randomStringForTestData = await generateRandomData.generateRandomString();
         await editChildDetailsPage.changeName(randomStringForTestData);
         await expect(editChildDetailsPage.nameInput).toHaveValue(randomStringForTestData);
@@ -24,10 +33,6 @@ test.describe('Change Child Details Smoketests', () => {
     });
 
     test('Change Child Name from Profile Info Page and Save Changes smoketest', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const profileInfoPage = await myAccountPage.goToProfileInfo();
-        const currentChildDetailsName = await profileInfoPage.childDetailsName.innerText();
-        const editChildDetailsPage = await profileInfoPage.goToEditChildDetails();
         const randomStringForTestData = await generateRandomData.generateRandomString();
         await editChildDetailsPage.changeName(randomStringForTestData);
         await expect(editChildDetailsPage.nameInput).toHaveValue(randomStringForTestData);
@@ -36,13 +41,10 @@ test.describe('Change Child Details Smoketests', () => {
         await editChildDetailsPage.goBackToProfileInfo();
         const childDetailsNameAfterSavingChanges = await profileInfoPage.childDetailsName.innerText();
         expect(childDetailsNameAfterSavingChanges).not.toMatch(currentChildDetailsName);
+        expect(childDetailsNameAfterSavingChanges).toContain(randomStringForTestData);
     });
 
     test('Negative Test: Change Child Name to Empty from Profile Info Page and Verify Error smoketest', async ({ page }) => {
-        const myAccountPage = new MyAccountPage(page);
-        const profileInfoPage = await myAccountPage.goToProfileInfo();
-        const currentChildDetailsName = await profileInfoPage.childDetailsName.innerText();
-        const editChildDetailsPage = await profileInfoPage.goToEditChildDetails();
         // Change the child name to be an empty string
         await editChildDetailsPage.changeName('');
         await expect(editChildDetailsPage.nameInput).toHaveValue('');

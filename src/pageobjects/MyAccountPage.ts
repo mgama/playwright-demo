@@ -15,6 +15,10 @@ export class MyAccountPage {
     this.accountSettingsMenuOption = page.locator('text=Account Settings');
   }
 
+  async goTo() {
+    await this.page.goto('/account');
+  }
+
   async goToProfileInfo() {
     // expect(this.profileInfoMenuOption).toBeVisible();
     await this.profileInfoMenuOption.click();
