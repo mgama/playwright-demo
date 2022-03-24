@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class EditContactDetailsPage {
   page: Page;
@@ -34,13 +34,11 @@ export class EditContactDetailsPage {
   }
 
   async changeFirstName(firstName: string) {
-    // expect(this.firstNameInput).toBeEnabled();
     await this.firstNameInput.click();
     await this.firstNameInput.fill(firstName);
   }
 
   async changeLastName(lastName: string) {
-    // expect(this.lastNameInput).toBeEnabled();
     await this.lastNameInput.click();
     await this.lastNameInput.fill(lastName);
   }
