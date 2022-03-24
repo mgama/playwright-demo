@@ -23,7 +23,7 @@ test.describe('Change Account Settings Smoketests', () => {
         editShippingAddressPage = await accountSettingsPage.goToEditAddressBook();
     });
 
-    test('Negative Test: Change All Address Values (valid US Address) on Account Settings and Cancel Changes', async ({ page }) => {
+    test('Negative Test: Change All Address Values on Account Settings and Cancel Changes', async ({ page }) => {
         const randomStringForTestData = await generateRandomData.generateRandomString();
         await editShippingAddressPage.changeFirstName(randomStringForTestData);
         await expect(editShippingAddressPage.firstNameInput).toHaveValue(randomStringForTestData);
@@ -71,6 +71,36 @@ test.describe('Change Account Settings Smoketests', () => {
         await expect(editShippingAddressPage.stateDropdown).toHaveValue('Massachusetts');
         await editShippingAddressPage.changeZipCode('02131');
         await expect(editShippingAddressPage.zipCodeInput).toHaveValue('02131');
+        await editShippingAddressPage.changePhoneNumber('6175552340');
+        await expect(editShippingAddressPage.phoneNumberInput).toHaveValue('6175552340');
+        await editShippingAddressPage.saveChanges();
+        await editShippingAddressPage.waitForSuccessfulAddressUpdateNotification();
+        await editShippingAddressPage.goBackToAccountSettings();
+        // Verify the displayed address on the Account Settings Page has been updated to the changes done on this test
+        const displayedAddressAfterSavingChanges = await accountSettingsPage.displayedAddress.innerText();
+        expect(displayedAddressAfterSavingChanges).not.toMatch(originalAddress);
+    });
+
+    test('Change All Address Values (valid Canada Address) on Account Settings and Save Changes', async ({ page }) => {
+        const randomStringForTestData = await generateRandomData.generateRandomString();
+        await editShippingAddressPage.changeFirstName(randomStringForTestData);
+        await expect(editShippingAddressPage.firstNameInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.changeLastName(randomStringForTestData);
+        await expect(editShippingAddressPage.lastNameInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.changeCompany(randomStringForTestData);
+        await expect(editShippingAddressPage.companyInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.changeStreetAddress(randomStringForTestData);
+        await expect(editShippingAddressPage.streetAddressInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.changeApt(randomStringForTestData);
+        await expect(editShippingAddressPage.aptInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.changeCity(randomStringForTestData);
+        await expect(editShippingAddressPage.cityInput).toHaveValue(randomStringForTestData);
+        await editShippingAddressPage.selectCountry('Canada');
+        await expect(editShippingAddressPage.countryDropdown).toHaveValue('Canada');
+        await editShippingAddressPage.selectState('Alberta');
+        await expect(editShippingAddressPage.stateDropdown).toHaveValue('Alberta');
+        await editShippingAddressPage.changeZipCode('T2P 1J9');
+        await expect(editShippingAddressPage.zipCodeInput).toHaveValue('T2P 1J9');
         await editShippingAddressPage.changePhoneNumber('6175552340');
         await expect(editShippingAddressPage.phoneNumberInput).toHaveValue('6175552340');
         await editShippingAddressPage.saveChanges();
