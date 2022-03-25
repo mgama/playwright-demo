@@ -43,7 +43,7 @@ export class EditShippingAddressPage {
     this.streetAddressLabel = page.locator('label[text=Street Address]');
     this.streetAddressInput = page.locator("input[placeholder='Street Address']");
     this.aptLabel = page.locator('label[text=Apt, Suite, or Floor (optional)]');
-    this.aptInput = page.locator("input[placeholder='Apt, Suite, or Floor']");
+    this.aptInput = page.locator('input[name=line2]');
     this.cityLabel = page.locator('label[text=City]');
     this.cityInput = page.locator('input[name=city]');
     this.countryLabel = page.locator('label[text=Country]');
